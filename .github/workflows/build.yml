@@ -23,6 +23,13 @@ jobs:
     
     - name: Build
       run: dotnet build -c release --no-restore
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        # Artifact name
+        name: GitHubActionsHelloWorldConsoleDownloadableArtifact #.zip will be added automatically
+        path: ./bin/release/net5.0/*.*
         
     - name: Test
       run: echo 'Done'
