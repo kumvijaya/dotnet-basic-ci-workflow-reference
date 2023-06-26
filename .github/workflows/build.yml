@@ -4,11 +4,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-build:
+  build:
     runs-on: ubuntu-latest
     name: Test build
     continue-on-error: false
     steps:
 
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build -c release --no-restore
+        
     - name: Test
-      run: echo 'Hello world'
+      run: echo 'Done'
+
