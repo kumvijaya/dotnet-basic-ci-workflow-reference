@@ -1,0 +1,39 @@
+name: Pre Merge
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions: 'write-all'
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PROJECT_PATH: 'src/common.csproj'
+  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: ".NET Build"
+        uses: abs-wavesight/github-action-workflows/actions/nuget-dotnet-build@feature/pack-nuget
+        with:
+          working-directory: ./src
+          filename: dotnet-sample.csproj
+
+      - name: "Zip Build Output"
+        uses: abs-wavesight/github-action-workflows/actions/zip@main
+        with:
+           files: ./src/bin/output
+           dest: zip/common.zip
+
+      - name: Installing NBGV
+        run: dotnet tool install --tool-path ../../nbvg_tool nbgv

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GitHubActionsHelloWorldConsoleDownloadableArtifact
+namespace HelloWorld
 {
     class Program
     {
