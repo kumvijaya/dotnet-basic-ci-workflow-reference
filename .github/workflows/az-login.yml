@@ -1,0 +1,26 @@
+name: Az Login Test
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+jobs:
+  az-login:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    # permissions: 
+    #   id-token: write #This is required for requesting the OIDC JWT Token
+
+    steps:
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure Logout
+        run: >
+          az logout
